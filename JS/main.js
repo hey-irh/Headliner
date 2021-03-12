@@ -53,6 +53,36 @@ function concat() {
   if (dailyMail !== 'undefined') {
     allNews = theGuardian.concat(bbc, mirror, theTimes, dailyMail);
     allNews.forEach((allNews) => headLines.push(allNews.title));
-    console.log(headLines);
+    findHeadlines(headLines);
   } else concat();
+}
+
+function findHeadlines(headLines) {
+  let array = [];
+  headLines.forEach((headlines) => array.push(headlines.split(' ')));
+  let words = array.join(' ');
+  console.log(words);
+  //words is currently a big string needs to be combined in to an array or remove the commas
+
+  var counts = {};
+  var compare = 0;
+  var mostFrequent;
+  (function (array) {
+    for (var i = 0, len = array.length; i < len; i++) {
+      var word = array[i];
+
+      if (counts[word] === undefined) {
+        counts[word] = 1;
+      } else {
+        counts[word] = counts[word] + 1;
+      }
+      if (counts[word] > compare) {
+        compare = counts[word];
+        mostFrequent = words[i];
+      }
+    }
+    return mostFrequent;
+  })(words);
+
+  console.log(mostFrequent);
 }
