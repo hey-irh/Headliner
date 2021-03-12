@@ -15,11 +15,13 @@ app.listen(port, () => {
 const NewsAPI = require('newsapi');
 const newsapi = new NewsAPI('2c7880703dde46bba0f3a7f808d7e380');
 
-newsapi.v2
-  .topHeadlines({
+app.get('/news', async function (req, res) {
+  const news = await newsapi.v2.everything({
     language: 'en',
-    country: 'gb',
-  })
-  .then((response) => {
-    console.log(response.articles);
+    domains:
+      'bbc.co.uk, theguardian.com, mirror.co.uk, thetimes.co.uk, dailymail.co.uk',
   });
+  console.log(news);
+  res.json({ success: true, payload: news });
+  console.log(news);
+});
