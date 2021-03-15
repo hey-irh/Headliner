@@ -6,6 +6,12 @@ var dailyMail;
 var allNews;
 var headLines = [];
 
+let bbcDiv = document.querySelector('#bbcDiv');
+let guardianDiv = document.querySelector('#guardianDiv');
+let timesDiv = document.querySelector('#timesDiv');
+let dailymailDiv = document.querySelector('#dailymailDiv');
+let mirrorDiv = document.querySelector('#mirrorDiv');
+
 // API call per publication due to limitation of free news api
 async function getTheGuardian() {
   const response = await fetch(`http://localhost:5000/theguardian`);
@@ -46,43 +52,71 @@ async function getDailyMail() {
   const { payload } = await response.json();
   console.log(payload);
   dailyMail = payload.articles;
+
   concat();
 }
 
+//function to collate all news
 function concat() {
   if (dailyMail !== 'undefined') {
     allNews = theGuardian.concat(bbc, mirror, theTimes, dailyMail);
     allNews.forEach((allNews) => headLines.push(allNews.title));
-    findHeadlines(headLines);
+    Display(allNews);
+    console.log(allNews);
+    // findHeadlines(headLines);
   } else concat();
 }
 
-function findHeadlines(headLines) {
-  let array = [];
-  headLines.forEach((headlines) => array.push(headlines.split(' ')));
-  let words = array.join(' ');
-  console.log(words);
-  //words is currently a big string needs to be combined in to an array or remove the commas
+//function to find top topics by looking for most common word
+// function findHeadlines(headLines) {
+//   let wordsarray = [];
+//   headLines.forEach((headlines) => wordsarray.push(...headlines.split(' ')));
 
-  var counts = {};
-  var compare = 0;
-  var mostFrequent;
-  (function (array) {
-    for (var i = 0, len = array.length; i < len; i++) {
-      var word = array[i];
+//   console.log(wordsarray);
 
-      if (counts[word] === undefined) {
-        counts[word] = 1;
-      } else {
-        counts[word] = counts[word] + 1;
-      }
-      if (counts[word] > compare) {
-        compare = counts[word];
-        mostFrequent = words[i];
-      }
+//   const filteredarray = wordsarray.filter(
+//     (word) =>
+//       word !== 'to' || word !== 'for' || word !== 'and' || word !== 'but'
+//   );
+
+//   var counts = {};
+//   var compare = 0;
+//   var mostFrequent;
+//   (function (array) {
+//     for (var i = 0, len = array.length; i < len; i++) {
+//       var word = array[i];
+
+//       if (counts[word] === undefined) {
+//         counts[word] = 1;
+//       } else {
+//         counts[word] = counts[word] + 1;
+//       }
+//       if (counts[word] > compare) {
+//         compare = counts[word];
+//         mostFrequent = filteredarray[i];
+//       }
+//     }
+//     console.log(mostFrequent);
+//     return mostFrequent;
+//   })(filteredarray);
+
+//   console.log(mostFrequent);
+// }
+
+function Display(news) {
+  news.forEach((element) => {
+    const div = document.createElement('div');
+    div.innerText = `${element.title}`;
+    if (element.source.name === 'BBC News') {
+      bbcDiv.appendChild(div);
+    } else if (element.source.name === 'The Guardian') {
+      guardianDiv.appendChild(div);
+    } else if (element.source.name === 'The Times') {
+      timesDiv.appendChild(div);
+    } else if (element.source.name === 'Mirror Online') {
+      mirrorDiv.appendChild(div);
+    } else if (element.source.name === 'Daily Mail') {
+      dailymailDiv.appendChild(div);
     }
-    return mostFrequent;
-  })(words);
-
-  console.log(mostFrequent);
+  });
 }
