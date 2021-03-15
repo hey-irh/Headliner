@@ -106,16 +106,23 @@ function concat() {
 function Display(news) {
   news.forEach((element) => {
     const div = document.createElement('div');
+    const image = document.createElement('img');
     div.innerText = `${element.title}`;
+    image.src = element.urlToImage;
     if (element.source.name === 'BBC News') {
+      bbcDiv.appendChild(image);
       bbcDiv.appendChild(div);
     } else if (element.source.name === 'The Guardian') {
+      guardianDiv.appendChild(image);
       guardianDiv.appendChild(div);
     } else if (element.source.name === 'The Times') {
+      timesDiv.appendChild(image);
       timesDiv.appendChild(div);
     } else if (element.source.name === 'Mirror Online') {
+      mirrorDiv.appendChild(image);
       mirrorDiv.appendChild(div);
     } else if (element.source.name === 'Daily Mail') {
+      dailymailDiv.appendChild(image);
       dailymailDiv.appendChild(div);
     }
   });
